@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd $here
+#git submodule update --init --recursive
+source ./lib
+
+cleanDir $here/staging
+do_clones() {
+    mkdir -p $here/staging/sources
+    local n=0
+    for remote in $DOTFILES_REPOS; do
+        n=$(( $n + 1 ))
+        info "Cloning $remote"
+        git clone $remote $here/staging/sources/$n
+    done
+}
+do_clones
+
+$here/post_update

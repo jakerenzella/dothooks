@@ -1,0 +1,38 @@
+here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+reset_colour='\e[0m'
+
+info() {
+    local purple="${COLOUR_INFO:-\e[38;5;99m}"
+    echo -e "${purple}${1}${reset_colour}"
+}
+
+errol() {
+    local red="${COLOUR_ERROR:-\e[38;5;196m}"
+    echo -e "${red}${1}${reset_colour}"
+}
+
+pushd_() {
+    pushd "$1" >/dev/null
+}
+
+popd_() {
+    popd >/dev/null
+}
+
+cleanDir() {
+    if [ -e $1 ]; then
+        rm -rf $1
+    fi
+    mkdir $1
+}
+
+gitBehindRemote() {
+    git remote update
+    local oldrev=$(git rev-parse HEAD)
+    if [[ $oldrev != $(git rev-parse @{u}) ]]; then
+        return 0
+    else
+        return 1
+    fi
+}

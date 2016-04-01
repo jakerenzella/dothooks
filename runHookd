@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -e
+
+source ./lib
+OLD_HOME=$HOME
+HOME=$here/staging/home
+info "Running $1"
+pushd_ $(dirname $1)/../..
+    source $1
+popd_

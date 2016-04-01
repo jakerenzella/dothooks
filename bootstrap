@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+target=${DOTFILES_DIR:-~/.dotfiles}
+if [ ! -e $target ]; then
+    git clone https://github.com/rimmington/dothooks $target
+fi
+
+if [[ "x$DOTFILES_REPOS" == "x" ]]; then
+    export DOTFILES_REPOS='https://github.com/rimmington/dotfiles'
+fi
+
+$target/setup

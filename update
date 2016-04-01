@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+set -e
+
+here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source $here/lib
+
+if (( ($(date +%s) - $(stat -L --format %Y $here/updated 2>/dev/null || echo 0)) < (60*60*2) )); then
+    exit 0 # No need to go any further
+fi
+
+info "(Checking for dotfiles updates...)"
+
+needs_update=
+
+prep_staging() {
+    cleanDir $here/staging
+    cp -R $here/current/sources $here/staging/sources
+    for d in $here/staging/sources/*; do
+        pushd_ $d
+            if gitBehindRemote; then
+                needs_update="yes"
+                # Don't break because we want to fetch all remotes
+            fi
+        popd_
+    done
+    if [[ $needs_update == "yes" ]]; then
+        for d in $here/staging/sources/*; do
+            pushd_ $d
+                git reset --hard @{u}
+            popd_
+        done
+    fi
+}
+
+attempt_update() {
+    oldrev=$(git rev-parse HEAD)
+    if ! (git merge && $here/post_update); then
+        errol "Updating failed."
+        git reset --hard $oldrev
+        git submodule update --init --recursive
+    fi
+}
+
+pushd_ $here
+    prep_staging
+    if gitBehindRemote || [[ $needs_update == "yes" ]]; then
+        attempt_update
+    else
+        info "(You're sweet)"
+    fi
+popd_
+
+touch $here/updated
