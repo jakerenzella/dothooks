@@ -10,10 +10,28 @@ cleanDir $here/staging
 do_clones() {
     mkdir -p $here/staging/sources
     local n=0
-    for remote in $DOTFILES_REPOS; do
+    for repo in $DOTFILES_REPOS; do
         n=$(( $n + 1 ))
-        info "Cloning $remote"
-        git clone $remote $here/staging/sources/$n
+        # http://stackoverflow.com/a/19482947
+        local branch=${repo##*#}
+        local remote=${repo%#*}
+        local dest="$here/staging/sources/$n"
+
+        if [[ "$branch" == "$repo" ]]; then
+            branch=''
+            info "Cloning $remote"
+        else
+            info "Cloning $remote branch $branch"
+        fi
+
+        git clone $remote $dest
+
+        if [[ "$branch" != '' ]]; then
+            pushd_ $dest
+                git checkout -f $branch
+                git reset --hard
+            popd_
+        fi
     done
 }
 do_clones
