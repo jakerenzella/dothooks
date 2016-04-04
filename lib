@@ -36,3 +36,23 @@ gitBehindRemote() {
         return 1
     fi
 }
+
+line_in_file() {
+    if ! grep -Fxq "$2" "$1"; then
+        echo "$2" >> "$1"
+    fi
+}
+
+ensure_bash_sources() {
+    # So expanded ~ works in hooks
+    local rel="${1#$HOME/}"
+    if [ "$rel" != "$1" ]; then
+        rel="~/$rel"
+    fi
+    touch -a ~/.bash_suffix
+    line_in_file ~/.bash_suffix "source $rel"
+}
+
+ensure_shell_sources() {
+    ensure_bash_sources "$1"
+}
