@@ -2,10 +2,16 @@
 
 set -e
 
+_set_vars() {
+    OLD_HOME=$HOME
+    HOME=$root/staging/home
+    local d="$(pwd)"
+    HERE_LIB=$root/current/${d#$root/staging/}
+}
+
 source ./lib
-OLD_HOME=$HOME
-HOME=$here/staging/home
 info "Running $1"
 pushd_ $(dirname $1)/../..
+    _set_vars
     source $1
 popd_

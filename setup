@@ -1,21 +1,21 @@
 #!/usr/bin/env bash
 set -e
 
-here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd $here
+root="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd $root
 #git submodule update --init --recursive
 source ./lib
 
-cleanDir $here/staging
+cleanDir $root/staging
 do_clones() {
-    mkdir -p $here/staging/sources
+    mkdir -p $root/staging/sources
     local n=0
     for repo in $DOTFILES_REPOS; do
         n=$(( $n + 1 ))
         # http://stackoverflow.com/a/19482947
         local branch=${repo##*#}
         local remote=${repo%#*}
-        local dest="$here/staging/sources/$n"
+        local dest="$root/staging/sources/$n"
 
         if [[ "$branch" == "$repo" ]]; then
             branch=''
@@ -36,4 +36,4 @@ do_clones() {
 }
 do_clones
 
-$here/post_update
+$root/post_update

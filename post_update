@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 set -e
 
-here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source $here/lib
+root="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source $root/lib
 
-cd $here
+cd $root
 git submodule update --init --recursive
 
 links_to_current_home() {
-    [[ $(readlink $1) =~ ^$here/current/home/ ]]
+    [[ $(readlink $1) =~ ^$root/current/home/ ]]
 }
 
 not_even_a_link() {
@@ -16,48 +16,48 @@ not_even_a_link() {
 }
 
 setup_staging_home() {
-    cleanDir $here/staging/home
-    find $here/staging/sources/*/hooks/post_update.d/ -type f | perl -e 'print sort{($p=$a)=~s!.*/!!;($q=$b)=~s!.*/!!;$p cmp$q}<>' | xargs -I {} bash -c "$here/runHookd {} || exit 255"
+    cleanDir $root/staging/home
+    find $root/staging/sources/*/hooks/post_update.d/ -type f | perl -e 'print sort{($p=$a)=~s!.*/!!;($q=$b)=~s!.*/!!;$p cmp$q}<>' | xargs -I {} bash -c "$root/runHookd {} || exit 255"
 }
 
 check_links() {
-    pushd_ $here/staging/home
-        find . -mindepth 1 | sed 's/^\.\///' > $here/staging/manifest
+    pushd_ $root/staging/home
+        find . -mindepth 1 | sed 's/^\.\///' > $root/staging/manifest
     popd_
     while read f; do
-        if [ -d $here/staging/home/$f ]; then
+        if [ -d $root/staging/home/$f ]; then
             if ! (not_even_a_link ~/$f || [ -d ~/$f ]); then
                 errol "~/$f exists and is not a directory"
                 exit 1
             fi
         else
             if ! (not_even_a_link ~/$f || links_to_current_home ~/$f); then
-                errol "~/$f exists and is not a symlink into $here"
+                errol "~/$f exists and is not a symlink into $root"
                 exit 1
             fi
         fi
-    done < $here/staging/manifest
+    done < $root/staging/manifest
 }
 
 flip_current() {
-    if [ -e $here/current ]; then
-        rm -rf $here/old
-        mv $here/current $here/old
+    if [ -e $root/current ]; then
+        rm -rf $root/old
+        mv $root/current $root/old
     fi
-    mv $here/staging $here/current
+    mv $root/staging $root/current
 }
 
 setup_links() {
     while read f; do
-        if [ -d $here/current/home/$f ]; then
+        if [ -d $root/current/home/$f ]; then
             mkdir -p
         else
-            ln -sf $here/current/home/$f ~/$f
+            ln -sf $root/current/home/$f ~/$f
         fi
-    done < $here/current/manifest
-    if [ -e $here/old ]; then
+    done < $root/current/manifest
+    if [ -e $root/old ]; then
         while read f; do
-            if [ -d $here/old/$f ]; then
+            if [ -d $root/old/$f ]; then
                 if [ $(find ~/$f -maxdepth 0 -type d -empty 2>/dev/null) ]; then
                     rmdir ~/$f
                 fi
@@ -67,7 +67,7 @@ setup_links() {
                     rm ~/$f
                 fi
             fi
-        done < $here/old/manifest
+        done < $root/old/manifest
     fi
     # TODO: cleanup
 }
@@ -80,6 +80,6 @@ setup_links
 if [ -e ~/.bashrc ]; then
     sed -i '/#DOTFILES_MANAGED$/ d' ~/.bashrc
 fi
-echo "source $here/newshell.bash #DOTFILES_MANAGED" >> ~/.bashrc
+echo "source $root/newshell.bash #DOTFILES_MANAGED" >> ~/.bashrc
 
 info "Updated"
