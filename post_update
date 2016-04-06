@@ -3,6 +3,7 @@ set -e
 
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source $root/lib
+source $root/config
 
 cd $root
 git submodule update --init --recursive
