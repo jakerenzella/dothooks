@@ -5,6 +5,7 @@ root="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd $root
 #git submodule update --init --recursive
 source ./lib
+source ./config
 
 cleanDir $root/staging
 do_clones() {

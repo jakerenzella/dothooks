@@ -72,14 +72,18 @@ setup_links() {
     # TODO: cleanup
 }
 
+setup_shell_hooks() {
+    if [ -e ~/.bashrc ]; then
+        sed -i '/#DOTFILES_MANAGED$/ d' ~/.bashrc
+    fi
+    echo "$DOTFILES_DIR/update #DOTFILES_MANAGED" >> ~/.bashrc
+    echo "source ~/.bash_suffix #DOTFILES_MANAGED" >> ~/.bashrc
+}
+
 setup_staging_home
 check_links
 flip_current
 setup_links
-
-if [ -e ~/.bashrc ]; then
-    sed -i '/#DOTFILES_MANAGED$/ d' ~/.bashrc
-fi
-echo "source $root/newshell.bash #DOTFILES_MANAGED" >> ~/.bashrc
+setup_shell_hooks
 
 info "Updated"

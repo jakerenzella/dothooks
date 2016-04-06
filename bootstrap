@@ -9,4 +9,8 @@ if [[ "x$DOTFILES_REPOS" == "x" ]]; then
     export DOTFILES_REPOS='https://github.com/rimmington/dotfiles'
 fi
 
+echo "DOTFILES_REPOS='${DOTFILES_REPOS:-https://github.com/rimmington/dotfiles}'" > $target/config
+echo "DOTFILES_DIR='$target'" >> $target/config
+echo "DOTFILES_UPDATE_EVERY=${DOTFILES_UPDATE_EVERY:-7200}" >> $target/config
+
 $target/setup
