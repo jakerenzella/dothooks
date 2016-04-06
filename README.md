@@ -10,7 +10,7 @@ Bootstrap
 DOTFILES_REPOS='https://github.com/rimmington/dotfiles' source <(curl -s https://raw.githubusercontent.com/rimmington/dothooks/master/bootstrap)
 ```
 
-* `DOTFILES_REPOS` is a string-separated list of Git repositories. You can specify branches like `git@github.com:my/myrepo#mybranch`.
+* `DOTFILES_REPOS` is a space-separated list of Git repositories. You can specify branches like `git@github.com:my/myrepo#mybranch`.
 * `DOTFILES_DIR` is the directory `dothooks` operates from. Default is `~/.dotfiles`.
 * `DOTFILES_UPDATE_EVERY` is the time in seconds between looking for updates. Default is 2 hours.
 
