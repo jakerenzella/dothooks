@@ -3,14 +3,20 @@ dothooks
 
 Manage dotfiles in `~` with Git. Automatic updates. Multiple repositories. Won't overwrite your own files.
 
-Bootstrap:
+Bootstrap
+---------
 
 ```
 DOTFILES_REPOS='https://github.com/rimmington/dotfiles' source <(curl -s https://raw.githubusercontent.com/rimmington/dothooks/master/bootstrap)
 ```
 
+* `DOTFILES_REPOS` is a string-separated list of Git repositories. You can specify branches like `git@github.com:my/myrepo#mybranch`.
+* `DOTFILES_DIR` is the directory `dothooks` operates from. Default is `~/.dotfiles`.
+
 Hook magic
 ----------
+
+See [rimmington/dotfiles](https://github.com/rimmington/dotfiles) for an example dotfiles repo.
 
 * All scripts are executed by Bash.
 * Nothing in the user's home is touched until everything succeeds, so feel free to `errol` + `exit` whenever you want. `set -e` is nice too.
