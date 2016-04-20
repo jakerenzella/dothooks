@@ -54,3 +54,8 @@ ensure_bash_sources() {
 ensure_shell_sources() {
     ensure_bash_sources "$1"
 }
+
+sed_in_place() {
+    sed -i.to_replace "$@"
+    rm "${@: -1}.to_replace"
+}

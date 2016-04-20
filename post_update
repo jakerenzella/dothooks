@@ -75,7 +75,7 @@ setup_links() {
 
 setup_shell_hooks() {
     if [ -e ~/.bashrc ]; then
-        sed -i '/#DOTFILES_MANAGED$/ d' ~/.bashrc
+        sed_in_place '/#DOTFILES_MANAGED$/ d' ~/.bashrc
     fi
     echo "$DOTFILES_DIR/update #DOTFILES_MANAGED" >> ~/.bashrc
     echo "source ~/.bash_suffix #DOTFILES_MANAGED" >> ~/.bashrc
