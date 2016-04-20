@@ -10,9 +10,10 @@ _set_vars() {
     HERE_LIB=$root/current/${d#$root/staging/}
 }
 
-source ./lib
+source $root/lib/for_hooks
 info "Running $1"
 pushd_ $(dirname $1)/../..
     _set_vars
+    unset root
     source $1
 popd_

@@ -1,0 +1,24 @@
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/common"
+
+_ensure_shell_sources() {
+    # So expanded ~ works in hooks
+    local rel="${2#$HOME/}"
+    if [ "$rel" != "$2" ]; then
+        rel="~/$rel"
+    fi
+    local root="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/.."
+    line_in_file $root/staging/${1}_suffix "source $rel"
+}
+
+ensure_bash_sources() {
+    _ensure_shell_sources bash "$1"
+}
+
+ensure_zsh_sources() {
+    _ensure_shell_sources zsh "$1"
+}
+
+ensure_shell_sources() {
+    ensure_bash_sources "$1"
+    ensure_zsh_sources "$1"
+}

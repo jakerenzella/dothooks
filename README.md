@@ -34,4 +34,5 @@ See [rimmington/dotfiles](https://github.com/rimmington/dotfiles) for an example
 * `pushd_` and `popd_` are silent versions of their well-known cousins.
 * `info` and `errol` print happy and sad messages.
 * `line_in_file FILE LINE` does what is says. It'll break if the file doesn't exist.
-* `ensure_bash_sources` and `ensure_shell_sources` add to `.bashrc` or equivalent. You can do things like `ensure_bash_sources $HERE_LIB/my_bash_functions` or `ensure_bash_sources ~/.envvars`.
+* `sed_in_place SED_ARGS FILE` is `sed -i` for both GNU and BSD (and OSX) `sed`.
+* `ensure_bash_sources`, `ensure_zsh_sources` and `ensure_shell_sources` add to `.bashrc` or equivalent. You can do things like `ensure_bash_sources $HERE_LIB/my_bash_functions` or `ensure_shell_sources ~/.envvars`.

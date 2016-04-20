@@ -2,7 +2,7 @@
 set -eu
 
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source $root/lib
+source $root/lib/default
 source $root/config
 
 if (( ($(date +%s) - $(stat -L --format %Y $root/updated 2>/dev/null || echo 0)) < $DOTFILES_UPDATE_EVERY )); then

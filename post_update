@@ -2,7 +2,7 @@
 set -eu
 
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source $root/lib
+source $root/lib/default
 source $root/config
 
 cd $root
@@ -18,6 +18,8 @@ not_even_a_link() {
 
 setup_staging_home() {
     cleanDir $root/staging/home
+    touch -a $root/staging/bash_suffix
+    touch -a $root/staging/zsh_suffix
     find $root/staging/sources/*/hooks/post_update.d/ -type f | perl -e 'print sort{($p=$a)=~s!.*/!!;($q=$b)=~s!.*/!!;$p cmp$q}<>' | xargs -I {} bash -c "$root/runHookd {} || exit 255"
 }
 
@@ -73,12 +75,20 @@ setup_links() {
     # TODO: cleanup
 }
 
-setup_shell_hooks() {
-    if [ -e ~/.bashrc ]; then
-        sed_in_place '/#DOTFILES_MANAGED$/ d' ~/.bashrc
+remove_managed_from() {
+    if [ -e "$1" ]; then
+        sed_in_place '/#DOTFILES_MANAGED$/ d' "$1"
     fi
+}
+
+setup_shell_hooks() {
+    remove_managed_from ~/.bashrc
     echo "$DOTFILES_DIR/update #DOTFILES_MANAGED" >> ~/.bashrc
-    echo "source ~/.bash_suffix #DOTFILES_MANAGED" >> ~/.bashrc
+    echo "source $DOTFILES_DIR/current/bash_suffix #DOTFILES_MANAGED" >> ~/.bashrc
+
+    remove_managed_from ~/.zshrc
+    echo "$DOTFILES_DIR/update #DOTFILES_MANAGED" >> ~/.zshrc
+    echo "source $DOTFILES_DIR/current/zsh_suffix #DOTFILES_MANAGED" >> ~/.zshrc
 }
 
 setup_staging_home

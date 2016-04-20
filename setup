@@ -4,8 +4,8 @@ set -eu
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd $root
 #git submodule update --init --recursive
-source ./lib
-source ./config
+source $root/lib/default
+source $root/config
 
 cleanDir $root/staging
 do_clones() {

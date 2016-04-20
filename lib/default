@@ -1,0 +1,18 @@
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/common"
+
+cleanDir() {
+    if [ -e $1 ]; then
+        rm -rf $1
+    fi
+    mkdir $1
+}
+
+gitBehindRemote() {
+    git remote update
+    local oldrev=$(git rev-parse HEAD)
+    if [[ $oldrev != $(git rev-parse @{u}) ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
