@@ -1,15 +1,14 @@
 #!/usr/bin/env bash
+set -eu
 
 target=${DOTFILES_DIR:-~/.dotfiles}
 if [ ! -e $target ]; then
     git clone https://github.com/rimmington/dothooks $target
 fi
 
-if [[ "x$DOTFILES_REPOS" == "x" ]]; then
-    export DOTFILES_REPOS='https://github.com/rimmington/dotfiles'
-fi
+export DOTFILES_REPOS="${DOTFILES_REPOS:-https://github.com/rimmington/dotfiles}"
 
-echo "DOTFILES_REPOS='${DOTFILES_REPOS:-https://github.com/rimmington/dotfiles}'" > $target/config
+echo "DOTFILES_REPOS='${DOTFILES_REPOS}'" > $target/config
 echo "DOTFILES_DIR='$target'" >> $target/config
 echo "DOTFILES_UPDATE_EVERY=${DOTFILES_UPDATE_EVERY:-7200}" >> $target/config
 
