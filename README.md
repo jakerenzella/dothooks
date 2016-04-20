@@ -6,8 +6,16 @@ Manage dotfiles in `~` with Git. Automatic updates. Multiple repositories. Won't
 Bootstrap
 ---------
 
+For Bash 4.x (modern Linux):
+
 ```
 DOTFILES_REPOS='https://github.com/rimmington/dotfiles' source <(curl -s https://raw.githubusercontent.com/rimmington/dothooks/master/bootstrap)
+```
+
+For Bash ~3.2 (OSX):
+
+```
+curl -s https://raw.githubusercontent.com/rimmington/dothooks/master/bootstrap > bootstrap && DOTFILES_REPOS='https://github.com/rimmington/dotfiles' bash ./bootstrap; rm ./bootstrap
 ```
 
 * `DOTFILES_REPOS` is a space-separated list of Git repositories. You can specify branches like `git@github.com:my/myrepo#mybranch`.
