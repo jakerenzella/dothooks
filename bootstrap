@@ -10,6 +10,6 @@ export DOTFILES_REPOS="${DOTFILES_REPOS:-https://github.com/rimmington/dotfiles}
 
 echo "DOTFILES_REPOS='${DOTFILES_REPOS}'" > $target/config
 echo "DOTFILES_DIR='$target'" >> $target/config
-echo "DOTFILES_UPDATE_EVERY=${DOTFILES_UPDATE_EVERY:-7200}" >> $target/config
+echo "DOTFILES_UPDATE_EVERY=${DOTFILES_UPDATE_EVERY:-43200}" >> $target/config
 
 $target/setup
