@@ -16,3 +16,16 @@ gitBehindRemote() {
         return 1
     fi
 }
+
+fileModifiedUnixTime() {
+    if [ -e $1 ]; then
+        local res="$(stat -L --format %Y $1 2>/dev/null || true)"
+        if [[ "$res" == "" ]]; then
+            # Try BSD format
+            res="$(stat -f %m $1 2>/dev/null)"
+        fi
+        echo "$res"
+    else
+        echo "0"
+    fi
+}
