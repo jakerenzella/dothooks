@@ -11,7 +11,7 @@ fi
 
 info "(Checking for dotfiles updates...)"
 
-needs_update=
+needs_update=""
 
 prep_staging() {
     cleanDir $root/staging
@@ -24,7 +24,7 @@ prep_staging() {
             fi
         popd_
     done
-    if [[ $needs_update == "yes" ]]; then
+    if [[ $needs_update ]]; then
         for d in $root/staging/sources/*; do
             pushd_ $d
                 git reset --hard @{u}
@@ -34,17 +34,24 @@ prep_staging() {
 }
 
 attempt_update() {
+    local cmd="true"
+    if [[ $needs_update == "root" ]]; then
+        cmd="git reset --hard @{u}"
+    fi
+
     oldrev=$(git rev-parse HEAD)
-    if ! (git merge && $root/post_update); then
+    if ! ($cmd && $root/post_update); then
         errol "Updating failed."
         git reset --hard $oldrev
-        git submodule update --init --recursive
     fi
 }
 
 pushd_ $root
     prep_staging
-    if gitBehindRemote || [[ $needs_update == "yes" ]]; then
+    if gitBehindRemote; then
+        needs_update="root"
+    fi
+    if [[ $needs_update ]]; then
         attempt_update
     else
         info "(You're sweet)"
