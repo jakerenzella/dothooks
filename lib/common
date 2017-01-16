@@ -1,13 +1,19 @@
-reset_colour='\e[0m'
+reset_colour() {
+    echo -e "\033[0m"
+}
 
 info() {
-    local purple="${COLOUR_INFO:-\e[38;5;99m}"
-    echo -e "${purple}${1}${reset_colour}"
+    # Purple
+    prompt="$1"
+    echo -e -n "\033[38;5;99m$prompt"
+    reset_colour
 }
 
 errol() {
-    local red="${COLOUR_ERROR:-\e[38;5;196m}"
-    echo -e "${red}${1}${reset_colour}"
+    # Red
+    prompt="$1"
+    echo -e -n "\033[38;5;196m$prompt"
+    reset_colour
 }
 
 pushd_() {
